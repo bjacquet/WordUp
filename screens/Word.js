@@ -11,7 +11,7 @@ export default class Word extends Component {
   }
 
   render() {
-    const { word, definitions } = this.props.word
+    const { word, definitions } = this.props.word || { word: 'asd', definitions: ['qwe', 'zxc'] }
     console.dir(this.props)
 
     return (

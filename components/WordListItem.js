@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Button } from 'react-native'
 
 export default class WordListItem extends Component {
   render() {
-    const { word, definitions } = this.props
+    const { word, definitions, onPress } = this.props
 
     return (
       <View>
@@ -13,6 +13,8 @@ export default class WordListItem extends Component {
         <Text>
           {definitions[0]}
         </Text>
+        <Button title='hit' onPress={onPress}/>
+
       </View>
     )
   }
