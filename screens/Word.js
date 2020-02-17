@@ -11,8 +11,7 @@ export default class Word extends Component {
   }
 
   render() {
-    const { word, definitions } = this.props.word || { word: 'asd', definitions: ['qwe', 'zxc'] }
-    console.dir(this.props)
+    const { word: { word, definitions } } = this.props.navigation.state.params
 
     return (
       <View style={styles.container}>

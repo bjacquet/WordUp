@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, FlatList, StyleSheet } from 'react-native'
+import { View, FlatList, StyleSheet, Button } from 'react-native'
 
 import WordListItem from '../components/WordListItem'
 
@@ -29,7 +29,7 @@ export default class Words extends Component {
   renderWord = ({ item }) => {
     const { navigation: { navigate } } = this.props
     const { word, definitions } = item
-
+   
     return (
       <WordListItem
         word={word}
@@ -40,6 +40,7 @@ export default class Words extends Component {
   }
 
   render() {
+    const { navigation: { navigate } } = this.props
     const { words } = this.state
 
     return (
@@ -49,6 +50,7 @@ export default class Words extends Component {
           keyExtractor={keyExtractor}
           renderItem={this.renderWord}
         />
+        <Button title='Search' onPress={() => navigate('Search')} />
       </View>
     )
   }
