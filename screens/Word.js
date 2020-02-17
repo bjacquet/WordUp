@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View, Text, Button, AsyncStorage } from 'react-native'
 
 export default class Word extends Component {
   renderDefinition = (definition) => {
@@ -10,8 +10,36 @@ export default class Word extends Component {
     )
   }
 
+  handleOnPress = async (word, definitions, stored) => {
+    const { navigation: { navigate } } = this.props
+
+    try {
+      if (stored) {
+
+      } else {
+        const records_list = await AsyncStorage.getItem('record_list')
+        await AsyncStorage.setItem(
+          'records_list',
+          JSON.stringify(
+            [
+              ...records_list,
+              { word, definitions }
+            ]
+          )
+        )
+
+        navigate('Words')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   render() {
-    const { word: { word, definitions } } = this.props.navigation.state.params
+    const {
+      word: { word, definitions },
+      stored
+    } = this.props.navigation.state.params
 
     return (
       <View style={styles.container}>
@@ -20,6 +48,12 @@ export default class Word extends Component {
         </Text>
         <View style={styles.definitions}>
           {definitions.map(this.renderDefinition)}
+        </View>
+        <View>
+          <Button
+            title={stored && 'Remove from list' || 'Add to list'}
+            onPress={() => this.handleOnPress(word, definitions, stored)}
+          />
         </View>
       </View>
     )

@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, ActivityIndicator, FlatList } from 'react-native'
 
-import { discogs, searchRecords } from '../utils/discogs'
+import { discogs } from '../utils/discogs'
 import WordListItem from '../components/WordListItem'
+
+const keyExtractor = ({ word }) => word
 
 export default class Search extends Component {
   state = {
@@ -31,12 +33,14 @@ export default class Search extends Component {
   }
 
   renderRecord = ({ item }) => {
+    const { navigation: { navigate } } = this.props
     const { word, definitions } = item
    
     return (
       <WordListItem
         word={word}
         definitions={definitions}
+        onPress={() => navigate('Word', { word: item, stored: false })}
       />
     )
   }
@@ -69,6 +73,7 @@ export default class Search extends Component {
         <FlatList
           data={words}
           renderItem={this.renderRecord}
+          keyExtractor={keyExtractor}
         />
       </View>
     )
