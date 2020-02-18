@@ -1,9 +1,11 @@
 import * as React from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, AsyncStorage } from 'react-native'
 
 import Navigator from './routes/routes'
 
 function App() {
+  AsyncStorage.clear()
+  
   return (
     <Navigator />
   )

@@ -5,6 +5,7 @@ import Words from '../screens/Words'
 import Word from '../screens/Word'
 import Search from '../screens/Search'
 import SearchResults from '../screens/SearchResults'
+import Record from '../screens/Record'
 
 const screens = {
   Words: {
@@ -17,6 +18,12 @@ const screens = {
     screen: Word,
     navigationOptions: {
       title: 'WordUp'
+    }
+  },
+  Record: {
+    screen: Record,
+    navigationOptions: {
+      title: 'Record'
     }
   },
   Search: {

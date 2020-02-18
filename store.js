@@ -1,6 +1,7 @@
 let state = {
   isFetchingRecords: true,
   records: [],
+  thumbs: [],
   error: false,
   loading: false,
 }
