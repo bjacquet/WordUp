@@ -2,6 +2,7 @@ let state = {
   isFetchingRecords: true,
   records: [],
   error: false,
+  loading: false,
 }
 
 export const getState = () => {

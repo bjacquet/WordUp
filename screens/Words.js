@@ -2,27 +2,22 @@ import React, { Component } from 'react'
 import { View, FlatList, StyleSheet, Button } from 'react-native'
 
 import WordListItem from '../components/WordListItem'
-import { getState } from '../store'
+import { getState, setState } from '../store'
+import { getAllRecords } from '../utils/asyncStorage'
 
 const keyExtractor = ({ word }) => word
 
 export default class Words extends Component {
-  state = {
-    records: getState().records,
-    loading: false,
-    error: getState().error,
+  state = getState()
+
+  initializeData = async () => {
+    try {
+      const records = await getAllRecords()
+      this.setState({records})
+    } catch (error) {
+      console.log(error)
+    }
   }
-
-  // componentDidMount = async () => {
-  //   let allRecords = await getAllRecords()
-  //   if (allRecords !== null) this.setState({ words: allRecords })
-  // }
-
-  // shouldComponentUpdate = (_a, _b) => {
-  //   console.dir(_a)
-  //   console.dir(_b)
-  //   debugger
-  // }
 
   renderWord = ({ item }) => {
     const { navigation: { navigate } } = this.props
@@ -37,9 +32,13 @@ export default class Words extends Component {
     )
   }
 
+  componentDidMount() {
+    this.initializeData()
+  }
+
   render() {
     const { navigation: { navigate } } = this.props
-    const { records } = getState()
+    const { records } = this.state
 
     console.log('Words - render')
     console.dir(records)

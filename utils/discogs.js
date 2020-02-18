@@ -17,14 +17,6 @@ const handleResponse = (data, callback) => {
   callback(results)
 }
 
-// export function searchRecords(searchWord, callback) {
-//   discogs.search(
-//     searchWord,
-//     {type: 'master'},
-//     (_err, data) => handleResponse(data, callback)
-//   )
-// }
-
 export async function searchRecords(searchWord) {
   discogs.search(searchWord, {type: 'master'})
 }

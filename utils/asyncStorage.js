@@ -1,6 +1,6 @@
 import { AsyncStorage } from 'react-native'
 
-import { getState, setState } from '../store'
+import { setState } from '../store'
 
 const ASYNC_STORAGE_RECORDS_KEY = 'ASYNC_STORAGE_RECORDS_KEY'
 
@@ -20,7 +20,7 @@ export const saveRecord = async (record) => {
   }
 }
 
-export const getAllRecords = async (record) => {
+export const getAllRecords = async () => {
   try {
     const allRecords = await AsyncStorage.getItem(ASYNC_STORAGE_RECORDS_KEY)
 
