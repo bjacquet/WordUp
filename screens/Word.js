@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, Text, Button, AsyncStorage } from 'react-native'
 
+import { saveRecord } from '../utils/asyncStorage'
+
 export default class Word extends Component {
   renderDefinition = (definition) => {
     return (
@@ -17,18 +19,8 @@ export default class Word extends Component {
       if (stored) {
 
       } else {
-        const records_list = await AsyncStorage.getItem('record_list')
-        await AsyncStorage.setItem(
-          'records_list',
-          JSON.stringify(
-            [
-              ...records_list,
-              { word, definitions }
-            ]
-          )
-        )
-
-        navigate('Words')
+        const allRecords = await saveRecord({ word, definitions })
+        navigate('Words', { records: allRecords })
       }
     } catch (error) {
       console.log(error)

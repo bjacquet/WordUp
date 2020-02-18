@@ -48,8 +48,6 @@ export default class Search extends Component {
   render() {
     const { words, loading, error } = this.state
 
-    console.dir(words)
-
     if (loading) {
       return (
         <View style={styles.center}>
