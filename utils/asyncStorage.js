@@ -16,7 +16,20 @@ export const saveRecord = async (record) => {
     return allRecords
   } catch (error) {
     console.log(error)
-    return []
+    return false
+  }
+}
+
+export const deleteRecord = async (record) => {
+  try {
+    let allRecords = await getAllRecords()
+    allRecords = allRecords.filter((elem) => elem.id !== record.id)
+    await AsyncStorage.setItem(ASYNC_STORAGE_RECORDS_KEY, JSON.stringify(allRecords))
+    setState({ records: allRecords })
+    return true
+  } catch (error) {
+    console.log(error)
+    return false
   }
 }
 

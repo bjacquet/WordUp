@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import { View, FlatList, StyleSheet, Button } from 'react-native'
 
-import WordListItem from '../components/WordListItem'
-import { getState, setState } from '../store'
+import { getState } from '../store'
 import { getAllRecords } from '../utils/asyncStorage'
+import RecordListItem from '../components/RecordListItem'
 
-const keyExtractor = ({ word }) => word
+const keyExtractor = ({ id }) => id
 
 export default class Words extends Component {
-  state = getState()
+  state = {
+    records: []
+  }
 
   initializeData = async () => {
     try {
@@ -21,35 +23,35 @@ export default class Words extends Component {
 
   renderWord = ({ item }) => {
     const { navigation: { navigate } } = this.props
-    const { word, definitions } = item
-   
+ 
     return (
-      <WordListItem
-        word={word}
-        definitions={definitions}
-        onPress={() => navigate('Word', { word: item, stored: true })}
+      <RecordListItem
+        record={item}
+        onPress={() => navigate('Record', { record: item, stored: true })}
       />
     )
   }
 
   componentDidMount() {
     this.initializeData()
+    console.log('Words - componentDidMount')
   }
 
   render() {
     const { navigation: { navigate } } = this.props
-    const { records } = this.state
+    const { records } = getState()
 
     console.log('Words - render')
     console.dir(records)
 
     return (
-      <View>
+      <View style={styles.container}>
         {records.length > 0 &&
           <FlatList
             data={records}
             keyExtractor={keyExtractor}
             renderItem={this.renderWord}
+            numColumns={5}
           />
         }
         <Button title='Search' onPress={() => navigate('Search')} />
