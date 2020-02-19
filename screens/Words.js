@@ -1,24 +1,19 @@
 import React, { Component } from 'react'
-import { View, FlatList, StyleSheet, Button } from 'react-native'
+import { View, FlatList, StyleSheet, Button, ActivityIndicator } from 'react-native'
 
 import { getState } from '../store'
 import { getAllRecords } from '../utils/asyncStorage'
 import RecordListItem from '../components/RecordListItem'
+import { TheState } from '../contextApi'
 
 const keyExtractor = ({ id }) => id
 
 export default class Words extends Component {
   state = {
-    records: []
-  }
-
-  initializeData = async () => {
-    try {
-      const records = await getAllRecords()
-      this.setState({records})
-    } catch (error) {
-      console.log(error)
-    }
+    isFetchingRecords: true,
+    thumbs: [],
+    error: false,
+    loading: false,
   }
 
   renderWord = ({ item }) => {
@@ -32,28 +27,33 @@ export default class Words extends Component {
     )
   }
 
-  componentDidMount() {
-    this.initializeData()
-    console.log('Words - componentDidMount')
-  }
-
   render() {
     const { navigation: { navigate } } = this.props
-    const { records } = getState()
-
-    console.log('Words - render')
-    console.dir(records)
 
     return (
       <View style={styles.container}>
-        {records.length > 0 &&
-          <FlatList
-            data={records}
-            keyExtractor={keyExtractor}
-            renderItem={this.renderWord}
-            numColumns={5}
-          />
-        }
+        <TheState.Consumer>
+          {({ val }) => {
+            const records = val.records
+
+            if (records.length > 0) {
+              return (
+                <FlatList
+                data={records}
+                keyExtractor={keyExtractor}
+                renderItem={this.renderWord}
+                numColumns={5}
+              />
+              )
+            }
+
+            return (
+              <View>
+                <ActivityIndicator animating={true} />
+              </View>
+            )
+          }}
+        </TheState.Consumer>
         <Button title='Search' onPress={() => navigate('Search')} />
       </View>
     )

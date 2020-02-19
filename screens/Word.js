@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { StyleSheet, View, Text, Button } from 'react-native'
 
 import { saveRecord } from '../utils/asyncStorage'
+import { TheState } from '../contextApi'
 
 export default class Word extends Component {
   renderDefinition = (definition) => {
@@ -12,7 +13,7 @@ export default class Word extends Component {
     )
   }
 
-  handleOnPress = async (word, definitions, stored) => {
+  handleOnPress = async (word, definitions, stored, callback) => {
     const { navigation: { navigate } } = this.props
 
     try {
@@ -20,7 +21,9 @@ export default class Word extends Component {
 
       } else {
         const allRecords = await saveRecord({ word, definitions })
-        navigate('Words', { records: allRecords })
+        callback()
+//        navigate('Words', { records: allRecords })
+        navigate('Words')
       }
     } catch (error) {
       console.log(error)
@@ -42,10 +45,16 @@ export default class Word extends Component {
           {definitions.map(this.renderDefinition)}
         </View>
         <View>
-          <Button
-            title={stored && 'Remove from list' || 'Add to list'}
-            onPress={() => this.handleOnPress(word, definitions, stored)}
-          />
+          <TheState.Consumer>
+            {({ updateTheState }) => {
+              <Button
+                title={stored && 'Remove from list' || 'Add to list'}
+                onPress={() => {
+                  this.handleOnPress(word, definitions, stored, updateTheState)
+                }}
+              />
+            }}
+          </TheState.Consumer>
         </View>
       </View>
     )
