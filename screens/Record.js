@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Button, Image } from 'react-native'
 
 import { saveRecord, deleteRecord, getAllRecords } from '../utils/asyncStorage'
 import { setState } from '../store'
+import { TheState } from '../contextApi'
 
 export default class Record extends Component {
   renderDefinition = (definition) => {
@@ -13,7 +14,7 @@ export default class Record extends Component {
     )
   }
 
-  handleOnPress = async (record, stored) => {
+  handleOnPress = async (record, stored, callback) => {
     const { navigation: { navigate } } = this.props
 
     try {
@@ -25,6 +26,7 @@ export default class Record extends Component {
       } else {
         const records = await saveRecord(record)
         setState({ records })
+        callback()
         navigate('Words', { records })
       }
     } catch (error) {
@@ -57,10 +59,16 @@ export default class Record extends Component {
           </View>
         </View>
         <View>
-          <Button
-            title={stored && 'Remove from list' || 'Add to list'}
-            onPress={() => this.handleOnPress(record, stored)}
-          />
+          <TheState.Consumer>
+            {({ updateTheState }) => {
+              return (
+                <Button
+                  title={stored && 'Remove from list' || 'Add to list'}
+                  onPress={() => this.handleOnPress(record, stored, updateTheState)}
+                />
+              )
+            }}
+          </TheState.Consumer>
         </View>
       </View>
     )
