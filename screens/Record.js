@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, Text, Button, Image } from 'react-native'
 
-import { saveRecord, deleteRecord, getAllRecords } from '../utils/asyncStorage'
-import { setState } from '../store'
+import { saveRecord, deleteRecord } from '../utils/asyncStorage'
 import { TheState } from '../contextApi'
 
 export default class Record extends Component {
@@ -18,17 +17,10 @@ export default class Record extends Component {
     const { navigation: { navigate } } = this.props
 
     try {
-      if (stored) {
-        await deleteRecord(record)
-        const records = await getAllRecords()
-        setState({ records })
-        navigate('Words', { records })
-      } else {
-        const records = await saveRecord(record)
-        setState({ records })
-        callback()
-        navigate('Words', { records })
-      }
+      stored ? await deleteRecord(record) : await saveRecord(record)
+      
+      callback()
+      navigate('Words')
     } catch (error) {
       console.log(error)
     }

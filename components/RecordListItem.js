@@ -14,14 +14,6 @@ export default class RecordListItem extends Component {
             style={styles.image}
           />
         </View>
-        {/* <View>
-          <Text style={styles.word}>
-            {record.word}
-          </Text>
-          <Text>
-            {record.definitions[0]}
-          </Text>
-        </View> */}
       </TouchableOpacity>
     )
   }

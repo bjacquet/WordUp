@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import { View, FlatList, StyleSheet, Button, ActivityIndicator } from 'react-native'
 
-import { getState } from '../store'
-import { getAllRecords } from '../utils/asyncStorage'
 import RecordListItem from '../components/RecordListItem'
 import { TheState } from '../contextApi'
 
@@ -39,7 +37,7 @@ export default class Words extends Component {
             if (records.length > 0) {
               return (
                 <FlatList
-                data={records}
+                data={records.reverse()}
                 keyExtractor={keyExtractor}
                 renderItem={this.renderWord}
                 numColumns={5}

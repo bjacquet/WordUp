@@ -1,7 +1,5 @@
 import { AsyncStorage } from 'react-native'
 
-import { setState } from '../store'
-
 const ASYNC_STORAGE_RECORDS_KEY = 'ASYNC_STORAGE_RECORDS_KEY'
 
 export const saveRecord = async (record) => {
@@ -12,8 +10,7 @@ export const saveRecord = async (record) => {
     allRecords.push(record)
 
     await AsyncStorage.setItem(ASYNC_STORAGE_RECORDS_KEY, JSON.stringify(allRecords))
-    setState({ records: allRecords })
-    return allRecords
+    return true
   } catch (error) {
     console.log(error)
     return false
@@ -25,7 +22,6 @@ export const deleteRecord = async (record) => {
     let allRecords = await getAllRecords()
     allRecords = allRecords.filter((elem) => elem.id !== record.id)
     await AsyncStorage.setItem(ASYNC_STORAGE_RECORDS_KEY, JSON.stringify(allRecords))
-    setState({ records: allRecords })
     return true
   } catch (error) {
     console.log(error)
