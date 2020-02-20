@@ -16,8 +16,7 @@ export default class Search extends Component {
   componentDidMount = async () => {
     try {
       const { searchString } = this.props.navigation.state.params
-      const response = await discogs.search(searchString, {type: 'master'})
-      await searchRecords(searchString)
+      const response = await searchRecords(searchString)
 
       const words = response.results.map(
         item => {

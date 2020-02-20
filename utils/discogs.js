@@ -6,8 +6,11 @@ export var discogs = new DiscogsClient({
 }).database()
 
 export async function searchRecords(searchWord) {
-  const response = fetch('http://localhost:8000/search/' + searchWord)
-    .then(((response) => response.json()))
-  console.log('discogs - searchRecords')
-  console.dir(response)
+  try {
+    let response = await fetch('http://192.168.1.171:8000/search/' + searchWord)
+    response = await response.json()
+    return response
+  } catch(error) {
+    console.log(error)
+  }
 }
