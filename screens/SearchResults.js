@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, ActivityIndicator, FlatList } from 'react-native'
 
-import { discogs } from '../utils/discogs'
+import { discogs, searchRecords } from '../utils/discogs'
 import RecordListItem from '../components/RecordListItem'
 
 const keyExtractor = ({ id }) => id
@@ -17,6 +17,7 @@ export default class Search extends Component {
     try {
       const { searchString } = this.props.navigation.state.params
       const response = await discogs.search(searchString, {type: 'master'})
+      await searchRecords(searchString)
 
       const words = response.results.map(
         item => {

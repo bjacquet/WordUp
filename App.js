@@ -5,8 +5,6 @@ import Navigator from './routes/routes'
 import { TheState } from './contextApi'
 import { getAllRecords } from './utils/asyncStorage'
 
-
-
 class App extends React.Component {
   state = {
     records: []
