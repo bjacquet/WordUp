@@ -37,7 +37,7 @@ export default class Record extends Component {
         <View style={styles.content}>
           <View>
             <Image
-              source={record.thumb}
+              source={{uri: record.thumb}}
               style={styles.image}
             />
           </View>

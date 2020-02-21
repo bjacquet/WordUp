@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, ActivityIndicator, FlatList } from 'react-native'
 
-import { discogs, searchRecords } from '../utils/discogs'
+import { searchRecords } from '../utils/discogs'
 import RecordListItem from '../components/RecordListItem'
 
 const keyExtractor = ({ id }) => id
