@@ -2,9 +2,21 @@ import { AsyncStorage } from 'react-native'
 
 const ASYNC_STORAGE_RECORDS_KEY = 'ASYNC_STORAGE_RECORDS_KEY'
 
+export const getRecord = async(id) => {
+  try {
+    let allRecords = await AsyncStorage.getItem(ASYNC_STORAGE_RECORDS_KEY) || []
+    if (typeof(allRecords) === 'string') allRecords = JSON.parse(allRecords)
+
+    return allRecords.find(elem => elem.id === id)
+  } catch (error) {
+    console.log(error)
+    return
+  }
+}
+
 export const saveRecord = async (record) => {
   try {
-    let allRecords =  await AsyncStorage.getItem(ASYNC_STORAGE_RECORDS_KEY) || []
+    let allRecords = await AsyncStorage.getItem(ASYNC_STORAGE_RECORDS_KEY) || []
     if (typeof(allRecords) === 'string') allRecords = JSON.parse(allRecords)
     
     allRecords = allRecords.filter((elem) => elem.id !== record.id)

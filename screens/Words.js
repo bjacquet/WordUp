@@ -40,7 +40,7 @@ export default class Words extends Component {
                   data={records.reverse()}
                   keyExtractor={keyExtractor}
                   renderItem={this.renderWord}
-                  numColumns={5}
+                  numColumns={3}
                   style={styles.records}
               />
               )

@@ -1,8 +1,12 @@
 * Features
 
-** WIP Add Review Form
-** TODO Display Review
+** DONE Add Review Form
+** DONE Display Review
 ** TODO Record Update
   A way to update a persistent record.
 
 * Bugs
+
+** TODO Don't add duplicated record
+  When showing a searched record present the stored one when available.
+** TODO Scroll up content when keyboard appears

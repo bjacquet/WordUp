@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ActivityIndicator, FlatList, Dimensions } from 
 
 import { searchRecords } from '../utils/discogs'
 import RecordListItem from '../components/RecordListItem'
+import { getRecord } from '../utils/asyncStorage'
 
 const keyExtractor = ({ id }) => id
 const WIDTH = Dimensions.get('window').width
@@ -41,13 +42,19 @@ export default class Search extends Component {
     }
   }
 
+  handleRecordOnPress = (item) => {
+    return async () => {
+      const { navigation: { navigate } } = this.props
+      const record = await getRecord(item.id)
+      navigate('Record', { record: record || item, stored: record && true })  
+    }
+  }
+
   renderRecord = ({ item }) => {
-    const { navigation: { navigate } } = this.props
-   
     return (
       <RecordListItem
         record={item}
-        onPress={() => navigate('Record', { record: item, stored: false })}
+        onPress={this.handleRecordOnPress(item)}
       />
     )
   }
