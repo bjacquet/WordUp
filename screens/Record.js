@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, Text, Button, Image, ImageBackground, SafeAreaView } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
 
 import { saveRecord, deleteRecord } from '../utils/asyncStorage'
 import { TheState } from '../contextApi'
 import Review from '../components/Review'
-import { ScrollView } from 'react-native-gesture-handler'
+import SocialMediaLinks from '../components/SocialMediaLinks'
 
 export default class Record extends Component {
   renderDefinition = (definition) => {
@@ -50,16 +51,31 @@ export default class Record extends Component {
               />
             </ImageBackground>
             <View style={{padding: 20}}>
-              <Text style={styles.contentDetails}>
-                {record.word}
+              <Text style={styles.contentSectionTitle}>
+                {record.title}
               </Text>
-              <Text style={styles.contentDetails}>
-                Released date: {record.year}
+              <Text style={styles.contentSectionTitle}>
+                {record.artists.map(a => a.name).join(', ')}
               </Text>
+              <Text style={styles.contentSectionContent}>
+                Release date: {record.year}
+              </Text>
+              <View style={{padding: 5}}>
+              {
+                record.tracklist.sort((a, b) => a.position - b.position).map(
+                  track => (
+                    <Text style={styles.contentSectionContent}>
+                      {track.position} {track.title} {track.duration && '(' + track.duration + ')'}
+                    </Text>
+                  )
+                )
+              }
+              </View>
             </View>
             {stored &&
               <Review record={record} />
             }
+            <SocialMediaLinks masterId={record.id} />
           </View>
           <View>
             <TheState.Consumer>
@@ -86,9 +102,12 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
-  contentDetails: {
+  contentSectionTitle: {
     fontSize: 20,
     fontWeight: 'bold'
+  },
+  contentSectionContent: {
+    fontSize: 15
   },
   imageBackground: {
     width: '100%',

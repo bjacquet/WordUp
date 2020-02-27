@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, ActivityIndicator, FlatList, Dimensions } from 'react-native'
 
-import { searchRecords } from '../utils/discogs'
+import { searchRecords, getMasterRelease } from '../utils/discogs'
 import RecordListItem from '../components/RecordListItem'
 import { getRecord } from '../utils/asyncStorage'
 
@@ -22,19 +22,10 @@ export default class Search extends Component {
     try {
       const { searchString } = this.props.navigation.state.params
       const response = await searchRecords(searchString, this.state.page)
-      const words = response.results.map(
-        item => {
-          return {
-             word: item.title,
-             year: item.year,
-             id: item.id,
-             thumb: item.thumb,
-          }
-        }
-      )
+
       this.setState({
         loading: false,
-        words: [...words],
+        words: response.results,
         pages: response.pagination.pages
       })
     } catch (e) {
@@ -45,8 +36,29 @@ export default class Search extends Component {
   handleRecordOnPress = (item) => {
     return async () => {
       const { navigation: { navigate } } = this.props
-      const record = await getRecord(item.id)
-      navigate('Record', { record: record || item, stored: record && true })  
+      let stored = true
+      let record = await getRecord(item.id)
+
+      if (!record) {
+        stored = false
+        record = await getMasterRelease(item.master_id)
+        item = {
+          id: item.master_id,
+          title: record.title,
+          tracklist: record.tracklist.map(track => {
+            return {
+              title: track.title,
+              position: track.position,
+              duration: track.duration
+            }
+          }),
+          year: record.year,
+          artists: record.artists.map(artist => ({name: artist.name})),
+          thumb: record.images.find(image => image.type === 'primary').uri150
+        }
+      }
+
+      navigate('Record', { record: item, stored })  
     }
   }
 
@@ -83,16 +95,8 @@ export default class Search extends Component {
       if (this.state.page >= this.state.pages) return
 
       const response = await searchRecords(searchString, nextPage)
-      const moreRecords = response.results.map(
-        item => {
-          return {
-              word: item.title,
-              year: item.year,
-              id: item.id,
-              thumb: item.thumb,
-          }
-        }
-      )
+      const moreRecords = response.results
+
       this.setState({
         loading: false,
         words: [...this.state.words, ...moreRecords],

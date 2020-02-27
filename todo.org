@@ -4,6 +4,7 @@
 ** DONE Display Review
 ** TODO Record Update
   A way to update a persistent record.
+** WIP Show related media (YouTube videos)
 
 * Bugs
 
