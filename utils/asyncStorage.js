@@ -6,11 +6,12 @@ export const saveRecord = async (record) => {
   try {
     let allRecords =  await AsyncStorage.getItem(ASYNC_STORAGE_RECORDS_KEY) || []
     if (typeof(allRecords) === 'string') allRecords = JSON.parse(allRecords)
-
+    
+    allRecords = allRecords.filter((elem) => elem.id !== record.id)
     allRecords.push(record)
 
     await AsyncStorage.setItem(ASYNC_STORAGE_RECORDS_KEY, JSON.stringify(allRecords))
-    return true
+    return record
   } catch (error) {
     console.log(error)
     return false

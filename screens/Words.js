@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, FlatList, StyleSheet, Button, ActivityIndicator } from 'react-native'
+import { View, FlatList, StyleSheet, Button, ActivityIndicator, Text } from 'react-native'
 
 import RecordListItem from '../components/RecordListItem'
 import { TheState } from '../contextApi'
@@ -37,17 +37,20 @@ export default class Words extends Component {
             if (records.length > 0) {
               return (
                 <FlatList
-                data={records.reverse()}
-                keyExtractor={keyExtractor}
-                renderItem={this.renderWord}
-                numColumns={5}
+                  data={records.reverse()}
+                  keyExtractor={keyExtractor}
+                  renderItem={this.renderWord}
+                  numColumns={5}
+                  style={styles.records}
               />
               )
             }
 
             return (
-              <View>
-                <ActivityIndicator animating={true} />
+              <View style={styles.noRecords}>
+                <Text style={styles.noRecordsText}>
+                  Your record collection is empty!
+                </Text>
               </View>
             )
           }}
@@ -60,7 +63,19 @@ export default class Words extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
     flex: 1,
   },
+  records: {
+    flex: 1
+  },
+  noRecords: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: 30
+  },
+  noRecordsText: {
+    textAlign: 'center',
+    fontSize: 30
+  }
 })

@@ -1,6 +1,7 @@
-export async function searchRecords(searchWord) {
+export async function searchRecords(searchWord, page) {
   try {
-    let response = await fetch('http://192.168.1.171:8000/search/' + searchWord)
+    const urlQuery = `http:///192.168.1.171:443/search/${searchWord}?page=${page}`
+    let response = await fetch(urlQuery)
     response = await response.json()
     return response
   } catch(error) {

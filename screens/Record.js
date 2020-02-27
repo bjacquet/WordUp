@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Text, Button, Image } from 'react-native'
+import { StyleSheet, View, Text, Button, Image, ImageBackground, SafeAreaView } from 'react-native'
 
 import { saveRecord, deleteRecord } from '../utils/asyncStorage'
 import { TheState } from '../contextApi'
+import Review from '../components/Review'
+import { ScrollView } from 'react-native-gesture-handler'
 
 export default class Record extends Component {
   renderDefinition = (definition) => {
@@ -33,60 +35,73 @@ export default class Record extends Component {
     } = this.props.navigation.state.params
 
     return (
-      <View style={styles.container}>
-        <View style={styles.content}>
-          <View>
-            <Image
+      <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.scrollView}>
+          <View style={styles.content}>
+            <ImageBackground
               source={{uri: record.thumb}}
-              style={styles.image}
-            />
+              style={styles.imageBackground}
+              imageStyle={{resizeMode: 'stretch'}}
+              blurRadius={3.14}
+            >
+              <Image
+                source={{uri: record.thumb}}
+                style={styles.image}
+              />
+            </ImageBackground>
+            <View style={{padding: 20}}>
+              <Text style={styles.contentDetails}>
+                {record.word}
+              </Text>
+              <Text style={styles.contentDetails}>
+                Released date: {record.year}
+              </Text>
+            </View>
+            {stored &&
+              <Review record={record} />
+            }
           </View>
           <View>
-            <Text style={styles.word}>
-              {record.word}
-            </Text>
-            <View style={styles.definitions}>
-              {record.definitions.map(this.renderDefinition)}
-            </View>
+            <TheState.Consumer>
+              {({ updateTheState }) => {
+                return (
+                  <Button
+                    title={stored && 'Remove from list' || 'Add to list'}
+                    onPress={() => this.handleOnPress(record, stored, updateTheState)}
+                  />
+                )
+              }}
+            </TheState.Consumer>
           </View>
-        </View>
-        <View>
-          <TheState.Consumer>
-            {({ updateTheState }) => {
-              return (
-                <Button
-                  title={stored && 'Remove from list' || 'Add to list'}
-                  onPress={() => this.handleOnPress(record, stored, updateTheState)}
-                />
-              )
-            }}
-          </TheState.Consumer>
-        </View>
-      </View>
+        </ScrollView>
+      </SafeAreaView>
     )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   content: {
     flex: 1,
-    justifyContent: 'flex-start',
-    flexDirection: 'row'
   },
-  word: {
-    flex: 1
+  contentDetails: {
+    fontSize: 20,
+    fontWeight: 'bold'
   },
-  definitions: {
-    flex: 4
-  },
-  definition: {
-
+  imageBackground: {
+    width: '100%',
+    paddingVertical: 20,
+    alignItems: 'center'
   },
   image: {
+    backgroundColor: 'transparent',
     width: 200,
-    height: 200
-  }
+    height: 200,
+    paddingVertical: 20
+  },
+  reviewContainer: {
+    padding: 20
+  },
 })
