@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, Text } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
+import { View, StyleSheet, Text, Image } from 'react-native'
+import { WebView } from 'react-native-webview';
+
 import { getMasterRelease } from '../utils/discogs'
 
 export default class SocialMediaLinks extends Component {
@@ -14,34 +15,39 @@ export default class SocialMediaLinks extends Component {
       const record = await getMasterRelease(masterId)
       
       this.setState({
-        videos: record.videos.map(v => v.uri),
+        videos: record.videos.map(v => v.uri.replace('/watch?', '/embed?')),
       })
     } catch (e) {
       this.setState({loading: false, error: true})
     }
   }
 
-  renderYouTubeItem ({ item }) {
-    return (
-      <Text>{item}</Text>
-    )
-  }
-
   render() {
     const { videos } = this.state
+
+    console.log(videos[0])
 
     return(
       <View style={{padding: 20}}>
         <Text style={styles.sectionTitle}>
           Videos
         </Text>
-        {
+        <View>
+        <WebView
+                source={{ uri: videos[0] }}
+                style={{ marginTop: 20 }}
+              /></View>
+        {/* {
           videos.map(
             video => (
-              <Text>{video}</Text>
+              <WebView
+                source={{ uri: video }}
+                style={{ marginTop: 20 }}
+                key={video}
+              />
             )
           )
-        }
+        } */}
       </View>
     )
   }

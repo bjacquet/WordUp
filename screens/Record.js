@@ -64,7 +64,7 @@ export default class Record extends Component {
               {
                 record.tracklist.sort((a, b) => a.position - b.position).map(
                   track => (
-                    <Text style={styles.contentSectionContent}>
+                    <Text style={styles.contentSectionContent} key={track.position}>
                       {track.position} {track.title} {track.duration && '(' + track.duration + ')'}
                     </Text>
                   )
